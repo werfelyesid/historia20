@@ -34,7 +34,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/welcome" element={<Welcome />} />
-            <Route path="/historia-clinica/:doctorUid" element={<HistoriaClinica />} />
+            <Route path="/historia-clinica/:uid" element={<HistoriaClinica />} />
           </Routes>
         </div>
       </Router>

@@ -5,6 +5,7 @@ import Register from './Register';
 import Login from './Login';
 import Welcome from './Welcome';
 import HistoriaClinica from './HistoriaClinica';
+import PrivateRoute from './PrivateRoute';
 import { AuthProvider } from './AuthContext';
 import './App.css'; // Asegúrate de que los estilos estén importados
 
@@ -34,7 +35,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/welcome" element={<Welcome />} />
-            <Route path="/historia-clinica/:doctorUid" element={<HistoriaClinica />} />
+            <Route path="/historia-clinica/:id" element={<HistoriaClinica />} />
           </Routes>
         </div>
       </Router>

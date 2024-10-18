@@ -1,0 +1,149 @@
+.agenda {
+  padding: 10px; /* Reducido el padding */
+  background-color: #f7f9fc;
+  border-radius: 8px; /* Ajustado el border-radius */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Reducido el tamaño de la sombra */
+}
+
+.time-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px; /* Espaciado reducido entre los slots */
+}
+
+.hour-slot {
+  flex: 1 1 45%;
+  margin: 2px; /* Reducido el margen */
+  box-sizing: border-box;
+}
+
+.time-slot {
+  cursor: pointer;
+  padding: 8px; /* Reducido el padding */
+  border: 1px solid #ddd; /* Reducido el grosor del borde */
+  border-radius: 8px; /* Menos redondeo en los bordes */
+  margin-bottom: 5px; /* Menos espacio entre slots */
+  background-color: #ffffff;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 0.9rem; /* Reducida la fuente */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Reducida la sombra */
+}
+
+.time-slot.expanded {
+  background-color: #e6f7ff;
+  border-color: #91d5ff;
+}
+
+.time-slot.occupied {
+  background-color: #ffcdd2;
+  border-color: #e57373;
+}
+
+.time-slot:hover {
+  background-color: #f1f1f1;
+  transform: translateY(-1px); /* Menos desplazamiento en hover */
+}
+
+.appointment-form {
+  background-color: #634242;
+  padding: 5px; /* Reducido el padding */
+  margin-bottom: 15px; /* Menos espacio debajo del formulario */
+  border: 1px solid #ddd;
+  border-radius: 8px; /* Menos redondeo en los bordes */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Menor sombra */
+  transition: all 0.3s ease;
+}
+
+.appointment-form label {
+  display: block;
+  margin-bottom: 8px; /* Menos espacio debajo de las etiquetas */
+  color: #333;
+  font-size: 0.9rem; /* Fuente más pequeña */
+}
+
+.appointment-form select,
+.appointment-form textarea {
+  padding: 5px; /* Reducido el padding */
+  border-radius: 4px; /* Bordes más pequeños */
+  border: 1px solid #ccc;
+  background-color: #ffffff;
+  font-size: 0.9rem; /* Fuente más pequeña */
+  transition: border-color 0.3s ease;
+}
+
+.appointment-form select:focus,
+.appointment-form textarea:focus {
+  border-color: #80bdff;
+}
+
+.appointment-form button {
+  margin-right: 5px; /* Menos espacio entre botones */
+  padding: 6px 12px; /* Botones más pequeños */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem; /* Fuente más pequeña */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.appointment-form button:hover {
+  transform: translateY(-1px); /* Menos desplazamiento en hover */
+}
+
+.appointment-buttons {
+  margin-top: 8px; /* Reducido el margen superior */
+}
+
+.appointment-buttons button {
+  margin-right: 3px; /* Menos espacio entre los botones */
+  margin-top: 3px;
+  padding: 6px 12px; /* Botones más pequeños */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem; /* Fuente más pequeña */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.appointment-buttons button:hover {
+  background-color: #ddd;
+  transform: translateY(-1px);
+}
+
+.appointment-buttons button.confirm {
+  background-color: #ff7961; /* Rojo por defecto, más suave */
+  color: white;
+}
+
+.appointment-buttons button.confirm.confirmed {
+  background-color: #66bb6a; /* Verde más suave si está confirmado */
+}
+
+.appointment-buttons button.delete {
+  background-color: #ef5350; /* Rojo */
+  color: white;
+}
+
+.appointment-buttons button.attend {
+  background-color: #64e7ac; /* Azul */
+  color: white;
+}
+
+.appointment-buttons button.not-attend {
+  background-color: #ffb74d; /* Naranja */
+  color: white;
+}
+
+.appointment-buttons button.confirm:hover,
+.appointment-buttons button.delete:hover,
+.appointment-buttons button.attend:hover,
+.appointment-buttons button.not-attend:hover {
+  transform: translateY(-1px); /* Menos desplazamiento en hover */
+  opacity: 0.9;
+}
+
+.appointment-note {
+  font-size: 0.85rem; /* Fuente más pequeña para la nota */
+  color: #555;
+  margin-top: 5px; /* Un pequeño espacio antes de la nota */
+}

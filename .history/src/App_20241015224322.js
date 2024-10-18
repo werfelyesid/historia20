@@ -5,10 +5,11 @@ import Register from './Register';
 import Login from './Login';
 import Welcome from './Welcome';
 import HistoriaClinica from './HistoriaClinica';
+import PrivateRoute from './PrivateRoute';
 import { AuthProvider } from './AuthContext';
 import './App.css'; // Asegúrate de que los estilos estén importados
 
-function Home() {
+function App() {
   return (
     <div>
       <h1>Bienvenido a Historia Clínica Odontológica</h1>
@@ -24,22 +25,5 @@ function Home() {
   );
 }
 
-function App() {
-  return (
-    <AuthProvider>
-      <Router>
-        <div>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/welcome" element={<Welcome />} />
-            <Route path="/historia-clinica/:doctorUid" element={<HistoriaClinica />} />
-          </Routes>
-        </div>
-      </Router>
-    </AuthProvider>
-  );
-}
 
 export default App;

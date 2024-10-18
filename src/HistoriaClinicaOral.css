@@ -1,0 +1,59 @@
+/* src/HistoriaClinicaOral.css */
+.historia-clinica-oral {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-size: 14px; /* Ajuste del tamaño de la letra para coincidir con .globalnav-link */
+}
+
+.historia-clinica-oral h2 {
+  margin-top: 0;
+}
+
+.historia-clinica-oral h3 {
+  margin-bottom: 10px;
+}
+
+.historia-clinica-oral input,
+.historia-clinica-oral textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.historia-clinica-oral button {
+  padding: 5px 10px; /* Mantener un padding adecuado para los botones */
+  margin-right: 0; /* Eliminar el espacio entre los botones */
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.historia-clinica-oral button:last-child {
+  background-color: #dc3545;
+}
+
+/* Ajuste de la clase .globalnav-link-text-container */
+.globalnav-link-text-container {
+  background-color: black;
+  padding: 15px 10px; /* Mantener el padding adecuado */
+  color: white;
+  border-radius: 5px;
+  display: inline-block;
+  margin-bottom: 10px;
+  margin-top: 5px;
+  height: auto;
+}
+
+/* Ajuste para los botones en el contenedor .globalnav-link */
+.globalnav-link {
+  display: flex; /* Usar flexbox para alinear los botones en fila */
+  justify-content: flex-start; /* Alinear los botones al inicio sin espacio entre ellos */
+  height: 60px; /* Aumentar la altura para mostrar toda la información */
+  font-size: 14px; /* Tamaño de letra para .globalnav-link */
+}

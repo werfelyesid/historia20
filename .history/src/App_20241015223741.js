@@ -5,8 +5,8 @@ import Register from './Register';
 import Login from './Login';
 import Welcome from './Welcome';
 import HistoriaClinica from './HistoriaClinica';
+import PrivateRoute from './PrivateRoute';
 import { AuthProvider } from './AuthContext';
-import './App.css'; // Asegúrate de que los estilos estén importados
 
 function Home() {
   return (
@@ -26,19 +26,22 @@ function Home() {
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <div>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/welcome" element={<Welcome />} />
-            <Route path="/historia-clinica/:doctorUid" element={<HistoriaClinica />} />
-          </Routes>
-        </div>
-      </Router>
-    </AuthProvider>
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
   );
 }
 
