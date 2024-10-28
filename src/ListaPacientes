@@ -1,0 +1,36 @@
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getPatientsByDoctorUid } from './services/doctorService';
+
+const ListaPacientes = ({ doctorUid }) => {
+  const [pacientes, setPacientes] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchPacientes = async () => {
+      const pacientesList = await getPatientsByDoctorUid(doctorUid);
+      setPacientes(pacientesList);
+    };
+
+    fetchPacientes();
+  }, [doctorUid]);
+
+  const handlePacienteClick = (patientUid) => {
+    navigate(`/odontograma/${doctorUid}/${patientUid}`);
+  };
+
+  return (
+    <div>
+      <h1>Lista de Pacientes</h1>
+      <ul>
+        {pacientes.map((paciente) => (
+          <li key={paciente.id} onClick={() => handlePacienteClick(paciente.id)}>
+            {paciente.primerNombre} {paciente.primerApellido}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default ListaPacientes;

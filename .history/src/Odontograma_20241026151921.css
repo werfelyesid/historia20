@@ -1,0 +1,16 @@
+.odontograma-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  .menu-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .odontograma-svg {
+    flex-grow: 1;
+    margin: 0 20px;
+  }

@@ -1,0 +1,136 @@
+.odontograma-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.diagnostico-tratamiento {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.diagnostico,
+.tratamiento {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+  width: 13.5%;
+  background-color: #f9f9f9;
+}
+
+.diagnostico h5,
+.tratamiento h5 {
+  text-align: center;
+  font-size: 8.4px; /* reducido en un 40% */
+}
+
+.diagnostico button,
+.tratamiento button {
+  display: block;
+  width: 60%; /* reducido en un 40% */
+  margin: 3px 0;
+  padding: 3px; /* reducido en un 40% */
+  font-size: 8.4px; /* reducido en un 40% */
+  cursor: pointer;
+  background-color: #3d3b3b;
+  border: none;
+  border-radius: 3px;
+  color: white;
+}
+
+.diagnostico button:hover,
+.tratamiento button:hover {
+  background-color: #767474;
+}
+
+.diagnostico-menu,
+.tratamiento-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 60%; /* reducido en un 40% */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  margin-top: 5px;
+}
+
+.diagnostico-menu li,
+.tratamiento-menu li {
+  padding: 3px 6px; /* reducido en un 40% */
+  font-size: 8.4px; /* reducido en un 40% */
+  list-style-type: none;
+  cursor: pointer;
+}
+
+.diagnostico-menu li:hover,
+.tratamiento-menu li:hover {
+  background-color: #f0f0f0;
+}
+
+#odontograma {
+  margin-top: 10px;
+  width: 80%;
+}
+
+.eliminar-tratamiento-box {
+  margin-top: 20px;
+  width: 80%;
+}
+
+.diagnosticos-guardados {
+  margin-top: 20px;
+  width: 80%;
+}
+
+#tooltip {
+  position: absolute;
+  background-color: #333;
+  color: #fff;
+  padding: 5px;
+  border-radius: 4px;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 1000;
+  display: none;
+}
+.globalnav {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: #333;
+}
+
+.globalnav-link {
+  padding: 10px 20px;
+  cursor: pointer;
+  color: white;
+  background-color: #333;
+}
+
+.globalnav-link:hover, .globalnav-link.active {
+  background-color: #575757;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.visible {
+  display: block;
+}
+
+.tab-content.hidden {
+  display: none;
+}
+
+.odontograma-container {
+  width: 100%;
+}
