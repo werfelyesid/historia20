@@ -1,8 +1,39 @@
 import React, { useEffect, useCallback } from 'react';
-import ToolTip from './ToolTip';
 
 const OdontogramaSVG = ({ handleElementClick }) => {
   const memoizedHandleElementClick = useCallback(handleElementClick, [handleElementClick]);
+
+  // Función para mostrar el tooltip
+  const showTooltip = useCallback((event) => {
+    const elementId = event.target.id;  // Obtener el ID del elemento que activa el tooltip
+    let tooltip = document.getElementById('tooltip');
+
+    // Si el tooltip no existe, crearlo
+    if (!tooltip) {
+      tooltip = document.createElement('div');
+      tooltip.id = 'tooltip';
+      document.body.appendChild(tooltip);
+    }
+
+    if (typeof elementId === 'string') {
+      const [diente, cara] = elementId.split('(');
+      tooltip.textContent = `Diente: ${diente}${cara ? `, Cara: ${cara.replace(')', '')}` : ''}`;
+    } else {
+      tooltip.textContent = '';
+    }
+
+    tooltip.style.display = 'block';
+    tooltip.style.left = `${event.pageX + 10}px`; // Ajusta la posición del tooltip respecto al mouse
+    tooltip.style.top = `${event.pageY + 10}px`;
+  }, []);
+
+  // Función para ocultar el tooltip
+  const hideTooltip = useCallback(() => {
+    const tooltip = document.getElementById('tooltip');
+    if (tooltip) {
+      tooltip.style.display = 'none';
+    }
+  }, []);
 
   // Esta función crea los dientes y los elementos gráficos del odontograma
   useEffect(() => {
@@ -169,19 +200,19 @@ const OdontogramaSVG = ({ handleElementClick }) => {
     const elements = document.querySelectorAll('rect, ellipse');
 
     elements.forEach(element => {
-      element.addEventListener('mouseenter', ToolTip.showTooltip);
-      element.addEventListener('mouseleave', ToolTip.hideTooltip);
+      element.addEventListener('mouseenter', showTooltip);
+      element.addEventListener('mouseleave', hideTooltip);
       element.addEventListener('click', memoizedHandleElementClick);
     });
 
     return () => {
       elements.forEach(element => {
-        element.removeEventListener('mouseenter', ToolTip.showTooltip);
-        element.removeEventListener('mouseleave', ToolTip.hideTooltip);
+        element.removeEventListener('mouseenter', showTooltip);
+        element.removeEventListener('mouseleave', hideTooltip);
         element.removeEventListener('click', memoizedHandleElementClick);
       });
     };
-  }, [memoizedHandleElementClick]);
+  }, [memoizedHandleElementClick, showTooltip, hideTooltip]);
 
   return <svg id="odontograma" width="600" height="300" viewBox="0 0 1000 400"></svg>;
 };

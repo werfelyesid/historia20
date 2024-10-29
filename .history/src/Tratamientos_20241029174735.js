@@ -105,7 +105,7 @@ export const tratamientosSuperficie = [
     { codigo: '870131', nombre: 'RADIOGRAFÍA DE ARTICULACIÓN TEMPOROMAXILAR (ATM)', tipo: 'imagenologia' },
     { codigo: '870440', nombre: 'RADIOGRAFÍAS INTRAORALES OCLUSALES', tipo: 'imagenologia' },
   ];
-  export const TratamientoMenu = ({
+  const TratamientoMenu = ({
     activeTratamientoMenu,
     handleTratamientoSelection,
     precios,

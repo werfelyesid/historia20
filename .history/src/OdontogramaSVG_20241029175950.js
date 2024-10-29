@@ -3,7 +3,7 @@ import ToolTip from './ToolTip';
 
 const OdontogramaSVG = ({ handleElementClick }) => {
   const memoizedHandleElementClick = useCallback(handleElementClick, [handleElementClick]);
-
+  
   // Esta función crea los dientes y los elementos gráficos del odontograma
   useEffect(() => {
     const dientesPermanentes = [
@@ -169,19 +169,19 @@ const OdontogramaSVG = ({ handleElementClick }) => {
     const elements = document.querySelectorAll('rect, ellipse');
 
     elements.forEach(element => {
-      element.addEventListener('mouseenter', ToolTip.showTooltip);
-      element.addEventListener('mouseleave', ToolTip.hideTooltip);
+      element.addEventListener('mouseenter', showTooltip);
+      element.addEventListener('mouseleave', hideTooltip);
       element.addEventListener('click', memoizedHandleElementClick);
     });
 
     return () => {
       elements.forEach(element => {
-        element.removeEventListener('mouseenter', ToolTip.showTooltip);
-        element.removeEventListener('mouseleave', ToolTip.hideTooltip);
+        element.removeEventListener('mouseenter', showTooltip);
+        element.removeEventListener('mouseleave', hideTooltip);
         element.removeEventListener('click', memoizedHandleElementClick);
       });
     };
-  }, [memoizedHandleElementClick]);
+  }, [memoizedHandleElementClick, showTooltip, hideTooltip]);
 
   return <svg id="odontograma" width="600" height="300" viewBox="0 0 1000 400"></svg>;
 };

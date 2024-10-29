@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+
 export const tratamientosSuperficie = [
     { codigo: '232102', nombre: 'OBTURACIÓN DENTAL CON RESINA DE FOTOCURADO', tipo: 'superficie' },
     { codigo: '232101', nombre: 'OBTURACIÓN DENTAL CON AMALGAMA', tipo: 'superficie' },
@@ -105,7 +106,7 @@ export const tratamientosSuperficie = [
     { codigo: '870131', nombre: 'RADIOGRAFÍA DE ARTICULACIÓN TEMPOROMAXILAR (ATM)', tipo: 'imagenologia' },
     { codigo: '870440', nombre: 'RADIOGRAFÍAS INTRAORALES OCLUSALES', tipo: 'imagenologia' },
   ];
-  export const TratamientoMenu = ({
+  const TratamientoMenu = ({
     activeTratamientoMenu,
     handleTratamientoSelection,
     precios,
@@ -208,36 +209,4 @@ export const tratamientosSuperficie = [
     );
   };
   
-  const Tratamientos = () => {
-    const [activeTratamientoMenu, setActiveTratamientoMenu] = useState(null);
-    const [precios, setPrecios] = useState({});
-  
-    const handleTratamientoSelection = (item, tipo) => {
-      console.log(`Tratamiento seleccionado: ${item.nombre} (${tipo})`);
-    };
-  
-    const handlePrecioChange = (codigo, precio) => {
-      setPrecios((prevPrecios) => ({
-        ...prevPrecios,
-        [codigo]: precio,
-      }));
-    };
-  
-    const toggleMenu = (menu, type) => {
-      setActiveTratamientoMenu(activeTratamientoMenu === menu ? null : menu);
-    };
-  
-    return (
-      <div>
-        <TratamientoMenu
-          activeTratamientoMenu={activeTratamientoMenu}
-          handleTratamientoSelection={handleTratamientoSelection}
-          precios={precios}
-          handlePrecioChange={handlePrecioChange}
-          toggleMenu={toggleMenu}
-        />
-      </div>
-    );
-  };
-  
-  export default Tratamientos;
+  export default TratamientoMenu;
