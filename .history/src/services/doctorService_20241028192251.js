@@ -50,7 +50,7 @@ export const addPatientToDoctor = async (doctorUid, pacienteData) => {
     await setDoc(pacienteDocRef, pacienteData);
     console.log('Paciente agregado exitosamente con ID: ', pacienteDocRef.id);
 
-    // Crear subcolecciones para el nuevo paciente
+    // Crear colecciones adicionales para el nuevo paciente
     const colecciones = [
       'evoluciones',
       'diagnosticos',
@@ -65,11 +65,11 @@ export const addPatientToDoctor = async (doctorUid, pacienteData) => {
 
     for (const coleccion of colecciones) {
       const coleccionRef = collection(db, `doctors/${doctorUid}/pacientes/${pacienteDocRef.id}/${coleccion}`);
-      await setDoc(doc(coleccionRef), {}); // Crea un documento vacío para inicializar la subcolección
-      console.log(`Subcolección ${coleccion} creada exitosamente`);
+      await setDoc(doc(coleccionRef), {});
+      console.log(`Colección ${coleccion} creada exitosamente`);
     }
 
-    console.log('Nuevo paciente y subcolecciones creadas exitosamente');
+    console.log('Nuevo paciente y colecciones creadas exitosamente');
   } catch (error) {
     console.error('Error al agregar paciente al doctor: ', error.message);
   }

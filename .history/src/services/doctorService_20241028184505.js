@@ -11,19 +11,15 @@ export const addDoctor = async (doctor) => {
 
     localStorage.setItem('doctorId', doctor.uid);
 
-    // Crea la colección 'pacientes' para el doctor
-    const pacientesCollectionRef = collection(db, `doctors/${doctor.uid}/pacientes`);
-    await setDoc(doc(pacientesCollectionRef), {}); // Crea un documento vacío para inicializar la colección
-
     // Agregar un paciente inicial al doctor
     await addPatientToDoctor(doctor.uid, {
-      patientUid: 'miPrimerPacienteUid', // UID inicial del paciente
-      primerNombre: 'Michael',
-      segundoNombre: 'John',	
-      primerApellido: 'Jackson',
-      segundoApellido: 'Ramirez',
+      patientUid: 'initialPatientUid', // UID inicial del paciente
+      primerNombre: 'Paciente',
+      segundoNombre: 'Nuevo',
+      primerApellido: 'Inicial',
+      segundoApellido: 'Jackson',
       basicInfo: {
-        edad: 65,
+        edad: 0,
         direccion: ''
       },
       odontograma: {},
@@ -50,7 +46,7 @@ export const addPatientToDoctor = async (doctorUid, pacienteData) => {
     await setDoc(pacienteDocRef, pacienteData);
     console.log('Paciente agregado exitosamente con ID: ', pacienteDocRef.id);
 
-    // Crear subcolecciones para el nuevo paciente
+    // Crear colecciones adicionales para el nuevo paciente
     const colecciones = [
       'evoluciones',
       'diagnosticos',
@@ -65,11 +61,11 @@ export const addPatientToDoctor = async (doctorUid, pacienteData) => {
 
     for (const coleccion of colecciones) {
       const coleccionRef = collection(db, `doctors/${doctorUid}/pacientes/${pacienteDocRef.id}/${coleccion}`);
-      await setDoc(doc(coleccionRef), {}); // Crea un documento vacío para inicializar la subcolección
-      console.log(`Subcolección ${coleccion} creada exitosamente`);
+      await setDoc(doc(coleccionRef), {});
+      console.log(`Colección ${coleccion} creada exitosamente`);
     }
 
-    console.log('Nuevo paciente y subcolecciones creadas exitosamente');
+    console.log('Nuevo paciente y colecciones creadas exitosamente');
   } catch (error) {
     console.error('Error al agregar paciente al doctor: ', error.message);
   }
