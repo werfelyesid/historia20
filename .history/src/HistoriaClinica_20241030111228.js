@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom'; // Importa Link
 import { fetchHechoPorHacer, getDoctorByUid, getPatientByUid, getEvoluciones, updatePatientData, addEvolucion } from './services/doctorService';
 import NuevoPaciente from './NuevoPaciente';
 import Agenda from './Agenda';
@@ -23,7 +23,6 @@ function HistoriaClinica() {
   const [activeTab, setActiveTab] = useState(null);
   const [hechoPorHacer, setHechoPorHacer] = useState([]);
   const [editedPatient, setEditedPatient] = useState(null);
-  const [showConsentimientos, setShowConsentimientos] = useState(false); // Estado para controlar la visibilidad del submenú
 
   useEffect(() => {
     console.log('doctorUid:', doctorUid); // Debugging statement
@@ -139,10 +138,6 @@ function HistoriaClinica() {
     });
   };
 
-  const toggleConsentimientos = () => {
-    setShowConsentimientos(!showConsentimientos);
-  };
-
   return (
     <div className="historia-clinica">
       <div className="globalnav-link-text-container">
@@ -159,7 +154,7 @@ function HistoriaClinica() {
           <li><button onClick={handleHechoPorHacerClick}>Hecho por hacer</button></li>
           <li><button onClick={handleEvolucionDelPacienteClick}>Evolución del paciente</button></li>
           <li><button onClick={() => setActiveTab('prescripcion')}>Prescripciones del paciente</button></li>
-          <li><button onClick={toggleConsentimientos}>Consentimientos</button></li>
+          <li><button onClick={() => setActiveTab('consentimientos')}>Consentimientos</button></li>
         </ul>
       </div>
 
@@ -216,9 +211,17 @@ function HistoriaClinica() {
         </table>
       )}
 
-      {showConsentimientos && (
+      {activeTab === 'consentimientos' && (
         <div className="consentimientos-submenu">
-          <ConsentimientoButtons doctorUid={doctorUid} patientUid={selectedPatient?.uid} />
+          <ul>
+            <li><button onClick={() => setActiveTab('consentimientoOperatoria')}>Consentimiento operatoria</button></li>
+            <li><button onClick={() => setActiveTab('consentimientoCorona')}>Consentimiento corona</button></li>
+            <li><button onClick={() => setActiveTab('consentimientoExodoncia')}>Consentimiento exodoncia</button></li>
+            <li><button onClick={() => setActiveTab('consentimientoEndodoncia')}>Consentimiento endodoncia</button></li>
+            <li><button onClick={() => setActiveTab('consentimientoImplante')}>Consentimiento implante</button></li>
+            <li><button onClick={() => setActiveTab('consentimientoProtesis')}>Consentimiento prótesis</button></li>
+            <li><button onClick={() => setActiveTab('consentimientoOrtodoncia')}>Consentimiento ortodoncia</button></li>
+          </ul>
         </div>
       )}
 
@@ -286,14 +289,14 @@ function HistoriaClinica() {
 
       {activeTab === 'patientList' && (
         <ul className="patients-list">
-          {patients.map((patient) => (
-            <li key={patient.uid} onClick={() => {
-              console.log('Selected patient:', patient);
-              setSelectedPatient(patient);
-            }}>
-              {patient.primerNombre || 'N/A'} {patient.primerApellido || 'N/A'}
-            </li>
-          ))}
+         {patients.map((patient) => (
+  <li key={patient.uid} onClick={() => {
+    console.log('Selected patient:', patient);
+    setSelectedPatient(patient);
+  }}>
+    {patient.primerNombre || 'N/A'} {patient.primerApellido || 'N/A'}
+  </li>
+))}
         </ul>
       )}
 
@@ -390,6 +393,19 @@ function HistoriaClinica() {
       ) : error ? (
         <p>{error}</p>
       ) : null}
+
+
+<div>
+      <h4>Historia Clínica Odontológica</h4>
+      {selectedPatient && (
+        <>
+          <ConsentimientoButtons doctorUid={doctorUid} patientUid={selectedPatient.uid} />
+        </>
+      )}
+      {error ? (
+        <p>{error}</p>
+      ) : null}
+    </div>
     </div>
   );
 }

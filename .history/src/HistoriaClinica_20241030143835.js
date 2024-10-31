@@ -390,6 +390,18 @@ function HistoriaClinica() {
       ) : error ? (
         <p>{error}</p>
       ) : null}
+
+      <div>
+        <h4>Historia Clínica Odontológica</h4>
+        {selectedPatient && (
+          <>
+            <ConsentimientoButtons doctorUid={doctorUid} patientUid={selectedPatient.uid} />
+          </>
+        )}
+        {error ? (
+          <p>{error}</p>
+        ) : null}
+      </div>
     </div>
   );
 }
