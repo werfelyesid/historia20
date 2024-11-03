@@ -2,15 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getPatientsByDoctorUid } from './services/doctorService';
 
-interface Patient {
-  id: string;
-  primerNombre: string;
-  primerApellido: string;
-  // Agrega otros campos necesarios aquí
-}
-
-const ListaPacientes: React.FC<{ doctorUid: string }> = ({ doctorUid }) => {
-  const [patients, setPatients] = useState<Patient[]>([]);
+const ListaPacientes = ({ doctorUid }) => {
+  const [patients, setPatients] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,7 +15,7 @@ const ListaPacientes: React.FC<{ doctorUid: string }> = ({ doctorUid }) => {
     fetchPatients();
   }, [doctorUid]);
 
-  const handlePatientsClick = (patientUid: string) => {
+  const handlePatientsClick = (patientUid) => {
     navigate(`/odontograma/${doctorUid}/${patientUid}`);
   };
 

@@ -6,11 +6,12 @@ interface Patient {
   id: string;
   primerNombre: string;
   primerApellido: string;
+  celular: string;
+  identificacion: string;
   // Agrega otros campos necesarios aquí
 }
-
-const ListaPacientes: React.FC<{ doctorUid: string }> = ({ doctorUid }) => {
-  const [patients, setPatients] = useState<Patient[]>([]);
+const ListaPacientes = ({ doctorUid }) => {
+  const [patients, setPatients] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,7 +23,7 @@ const ListaPacientes: React.FC<{ doctorUid: string }> = ({ doctorUid }) => {
     fetchPatients();
   }, [doctorUid]);
 
-  const handlePatientsClick = (patientUid: string) => {
+  const handlePatientsClick = (patientUid) => {
     navigate(`/odontograma/${doctorUid}/${patientUid}`);
   };
 
