@@ -6,7 +6,7 @@ interface PatientsListProps {
   onSelectPatient: (patient: Patient) => void;
 }
 
-const PatientsList: React.FC<PatientsListProps> = ({ patients, onSelectPatient }) => {
+const PatientList: React.FC<PatientsListProps> = ({ patients, onSelectPatient }) => {
   return (
     <ul className="patients-list">
       {patients.map((patient) => (

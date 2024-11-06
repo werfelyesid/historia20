@@ -1,12 +1,12 @@
 import React from 'react';
 import { Patient } from '../types';
 
-interface PatientsListProps {
+interface PatientListProps {
   patients: Patient[];
   onSelectPatient: (patient: Patient) => void;
 }
 
-const PatientsList: React.FC<PatientsListProps> = ({ patients, onSelectPatient }) => {
+const PatientList: React.FC<PatientListProps> = ({ patients, onSelectPatient }) => {
   return (
     <ul className="patients-list">
       {patients.map((patient) => (
@@ -18,4 +18,4 @@ const PatientsList: React.FC<PatientsListProps> = ({ patients, onSelectPatient }
   );
 };
 
-export default PatientsList;
+export default PatientList;

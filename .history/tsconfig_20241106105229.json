@@ -6,7 +6,6 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "jsx": "react", // Agrega esta línea para soportar JSX
     "baseUrl": "./",
     "paths": {
       "*": ["src/*"]

@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { fetchHechoPorHacer, getEvoluciones, updatePatientData, addEvolucion } from './services/doctorService';
-import { getPatientByUid, getAllPatients } from './services/firestoreService';
+import { useParams, Link } from 'react-router-dom';
+import { fetchHechoPorHacer, getDoctorByUid, getPatientByUid, getEvoluciones, updatePatientData, addEvolucion } from './services/doctorService';
 import NuevoPaciente from './NuevoPaciente';
-import Agenda from './Agenda/Agenda';
+import Agenda from './Agenda/Agenda'; // Actualiza la ruta de importación
 import Odontograma from './Odontograma';
 import EstadoDeCuentas from './EstadoDeCuentas';
 import Prescripcion from './Prescripcion';
 import HistoriaClinicaOral from './HistoriaClinicaOral';
 import FacturaForm from './FacturaForm';
 import RIPSForm from './RIPSForm';
-import ConsentimientoButtons from './ConsentimientoButtons';
-import BasicData from './BasicData';
-import HechoPorHacer from './HechoPorHacer';
-import EvolucionPaciente from './EvolucionPaciente';
-import EditBasicDataForm from './EditBasicDataForm';
-import PatientsList from './PatientsList';
+import ConsentimientoButtons from './ConsentimientoButtons'; 
+import BasicData from './BasicData'; // Ajusta la ruta de importación
+import HechoPorHacer from './HechoPorHacer'; // Ajusta la ruta de importación
+import EvolucionPaciente from './EvolucionPaciente'; // Ajusta la ruta de importación
+import EditBasicDataForm from './EditBasicDataForm'; // Ajusta la ruta de importación
+import PatientsList from './PatientsList'; // Ajusta la ruta de importación
+import { Patient } from './types'; // Ajusta la ruta de importación
 import './HistoriaClinica.css';
-import { Patient } from './types';
 
 interface Doctor {
   uid: string;
@@ -33,6 +32,25 @@ interface Doctor {
   celular: string;
   correo_electronico: string;
   // Otros campos del doctor
+}
+
+interface Patient {
+  uid: string;
+  primerNombre: string;
+  segundoNombre: string;
+  primerApellido: string;
+  segundoApellido: string;
+  identificacion: string;
+  genero: string;
+  fechaNacimiento: string;
+  edad: number;
+  estadoCivil: string;
+  celular: string;
+  domicilio: string;
+  ocupacion: string;
+  motivoConsulta: string;
+  historiaMedica: string;
+  // Otros campos del paciente
 }
 
 interface Evolucion {
@@ -66,21 +84,58 @@ const HistoriaClinica: React.FC = () => {
 
   useEffect(() => {
     console.log('doctorUid:', doctorUid); // Debugging statement
-    const fetchPatients = async () => {
+    const fetchDoctorData = async () => {
       try {
-        const patients = await getAllPatients();
-        setPatients(patients);
-        setSelectedPatient(patients[0] || null);
-        setEditedPatient(patients[0] || null);
+        if (!doctorUid) {
+          setError('El UID del doctor no está definido');
+          return;
+        }
+
+        const doctorData = await getDoctorByUid(doctorUid);
+        console.log('Doctor data:', doctorData); // Debugging statement
+        if (doctorData) {
+          setDoctor({
+            uid: doctorData.uid,
+            patients: doctorData.patients || [],
+            agenda: doctorData.agenda || null,
+            primerNombre: doctorData.primerNombre,
+            segundoNombre: doctorData.segundoNombre,
+            primerApellido: doctorData.primerApellido,
+            segundoApellido: doctorData.segundoApellido,
+            registroProfesional: doctorData.registroProfesional,
+            identificacion: doctorData.identificacion,
+            especialidad: doctorData.especialidad,
+            celular: doctorData.celular,
+            correo_electronico: doctorData.correo_electronico,
+            // Otros campos del doctor
+          });
+
+          if (doctorData.patients) {
+            const patientPromises = doctorData.patients.map(async (patient) => {
+              const patientData = await getPatientByUid(doctorUid, patient.uid);
+              return patientData;
+            });
+
+            const fetchedPatients = await Promise.all(patientPromises);
+            const validPatients = fetchedPatients.filter((patient): patient is Patient => patient !== null);
+            setPatients(validPatients);
+            setSelectedPatient(validPatients[0] || null);
+            setEditedPatient(validPatients[0] || null);
+          } else {
+            setError('No se encontraron pacientes para el doctor');
+          }
+        } else {
+          setError('No se encontraron datos del doctor');
+        }
       } catch (error) {
-        setError('Error al obtener los pacientes');
+        setError('Error al obtener datos del doctor');
         console.error(error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPatients();
+    fetchDoctorData();
   }, [doctorUid]);
 
   const fetchEvoluciones = async (patientUid: string) => {

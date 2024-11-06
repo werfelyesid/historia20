@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { fetchHechoPorHacer, getEvoluciones, updatePatientData, addEvolucion } from './services/doctorService';
-import { getPatientByUid, getAllPatients } from './services/firestoreService';
+import { useParams, Link } from 'react-router-dom';
+import { fetchHechoPorHacer, getDoctorByUid, getPatientByUid, getEvoluciones, updatePatientData, addEvolucion } from './services/doctorService';
 import NuevoPaciente from './NuevoPaciente';
-import Agenda from './Agenda/Agenda';
+import Agenda from './Agenda/Agenda'; // Actualiza la ruta de importación
 import Odontograma from './Odontograma';
 import EstadoDeCuentas from './EstadoDeCuentas';
 import Prescripcion from './Prescripcion';
 import HistoriaClinicaOral from './HistoriaClinicaOral';
 import FacturaForm from './FacturaForm';
 import RIPSForm from './RIPSForm';
-import ConsentimientoButtons from './ConsentimientoButtons';
+import ConsentimientoButtons from './ConsentimientoButtons'; 
 import BasicData from './BasicData';
 import HechoPorHacer from './HechoPorHacer';
 import EvolucionPaciente from './EvolucionPaciente';
 import EditBasicDataForm from './EditBasicDataForm';
 import PatientsList from './PatientsList';
 import './HistoriaClinica.css';
-import { Patient } from './types';
 
 interface Doctor {
   uid: string;
@@ -33,6 +31,25 @@ interface Doctor {
   celular: string;
   correo_electronico: string;
   // Otros campos del doctor
+}
+
+interface Patient {
+  uid: string;
+  primerNombre: string;
+  segundoNombre: string;
+  primerApellido: string;
+  segundoApellido: string;
+  identificacion: string;
+  genero: string;
+  fechaNacimiento: string;
+  edad: number;
+  estadoCivil: string;
+  celular: string;
+  domicilio: string;
+  ocupacion: string;
+  motivoConsulta: string;
+  historiaMedica: string;
+  // Otros campos del paciente
 }
 
 interface Evolucion {
@@ -66,26 +83,43 @@ const HistoriaClinica: React.FC = () => {
 
   useEffect(() => {
     console.log('doctorUid:', doctorUid); // Debugging statement
-    const fetchPatients = async () => {
+    const fetchDoctorData = async () => {
       try {
-        const patients = await getAllPatients();
-        setPatients(patients);
-        setSelectedPatient(patients[0] || null);
-        setEditedPatient(patients[0] || null);
+        const doctorData = await getDoctorByUid(doctorUid);
+        console.log('Doctor data:', doctorData); // Debugging statement
+        if (doctorData) {
+          setDoctor(doctorData);
+
+          const patientPromises = doctorData.patients.map(async (patient) => {
+            const patientData = await getPatientByUid(doctorUid, patient.uid);
+            return patientData;
+          });
+
+          const fetchedPatients = await Promise.all(patientPromises);
+          setPatients(fetchedPatients);
+          setSelectedPatient(fetchedPatients[0] || null);
+          setEditedPatient(fetchedPatients[0] || null);
+        } else {
+          setError('No se encontraron datos del doctor');
+        }
       } catch (error) {
-        setError('Error al obtener los pacientes');
+        setError('Error al obtener datos del doctor');
         console.error(error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPatients();
+    if (doctorUid) {
+      fetchDoctorData();
+    } else {
+      setError('El UID del doctor no está definido');
+    }
   }, [doctorUid]);
 
   const fetchEvoluciones = async (patientUid: string) => {
     try {
-      const evoluciones = await getEvoluciones(doctorUid!, patientUid);
+      const evoluciones = await getEvoluciones(doctorUid, patientUid);
       setEvoluciones(evoluciones);
     } catch (error) {
       setError('Error al obtener la evolución del paciente.');
@@ -100,7 +134,7 @@ const HistoriaClinica: React.FC = () => {
 
       const descripcionEvolucion = `Paciente ingresado en fecha ${new Date().toLocaleDateString()} a la hora ${new Date().toLocaleTimeString()}. Datos básicos: Nombre: ${newPatient.primerNombre} ${newPatient.primerApellido}, Identificación: ${newPatient.identificacion}, Género: ${newPatient.genero}, Fecha de Nacimiento: ${newPatient.fechaNacimiento}.`;
 
-      await addEvolucion(doctorUid!, newPatient.uid, descripcionEvolucion);
+      await addEvolucion(doctorUid, newPatient.uid, descripcionEvolucion);
 
       setPatients((prevPatients) => [...prevPatients, newPatient]);
       setSelectedPatient(newPatient);
@@ -127,7 +161,7 @@ const HistoriaClinica: React.FC = () => {
 
   const handleHechoPorHacerClick = async () => {
     if (selectedPatient) {
-      const treatments = await fetchHechoPorHacer(doctorUid!, selectedPatient.uid);
+      const treatments = await fetchHechoPorHacer(doctorUid, selectedPatient.uid);
       setHechoPorHacer(treatments);
       setActiveTab('hechoPorHacer');
     } else {
@@ -146,7 +180,7 @@ const HistoriaClinica: React.FC = () => {
   const handleSaveEdit = async () => {
     try {
       if (editedPatient) {
-        await updatePatientData(doctorUid!, editedPatient.uid, editedPatient);
+        await updatePatientData(doctorUid, editedPatient.uid, editedPatient);
         setSelectedPatient(editedPatient);
         setActiveTab(null);
       }
@@ -194,32 +228,32 @@ const HistoriaClinica: React.FC = () => {
 
       {showConsentimientos && (
         <div className="consentimientos-submenu">
-          <ConsentimientoButtons doctorUid={doctorUid!} patientUid={selectedPatient?.uid} />
+          <ConsentimientoButtons doctorUid={doctorUid} patientUid={selectedPatient?.uid} />
         </div>
       )}
 
       {activeTab === 'odontograma' && (
         <Odontograma
-          doctorUid={doctorUid!}
+          doctorUid={doctorUid}
           patientUid={selectedPatient?.uid}
         />
       )}
 
       {activeTab === 'estadoDeCuentas' && (
         <EstadoDeCuentas
-          doctorUid={doctorUid!}
+          doctorUid={doctorUid}
           patientUid={selectedPatient?.uid}
         />
       )}
       {activeTab === 'historiaClinicaOral' && (
         <HistoriaClinicaOral
-          doctorUid={doctorUid!}
+          doctorUid={doctorUid}
           patientUid={selectedPatient?.uid}
         />
       )}
       {activeTab === 'newPatient' && (
         <NuevoPaciente
-          doctorUid={doctorUid!}
+          doctorUid={doctorUid}
           onPatientAdded={handlePatientAdded}
           onCancel={handleCancelNewPatient}
         />
@@ -265,7 +299,7 @@ const HistoriaClinica: React.FC = () => {
 
       {activeTab === 'prescripcion' && (
         <Prescripcion
-          doctorUid={doctorUid!}
+          doctorUid={doctorUid}
           patientUid={selectedPatient?.uid}
         />
       )}
