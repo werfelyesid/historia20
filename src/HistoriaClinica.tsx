@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { fetchHechoPorHacer, getDoctorByUid, getPatientByUid, getEvoluciones, updatePatientData, addEvolucion } from './services/doctorService';
 import NuevoPaciente from './NuevoPaciente';
-import Agenda from './Agenda';
+import Agenda from './Agenda/Agenda'; // Actualiza la ruta de importación
 import Odontograma from './Odontograma';
 import EstadoDeCuentas from './EstadoDeCuentas';
 import Prescripcion from './Prescripcion';
@@ -12,18 +12,59 @@ import RIPSForm from './RIPSForm';
 import ConsentimientoButtons from './ConsentimientoButtons'; 
 import './HistoriaClinica.css';
 
-function HistoriaClinica() {
-  const { doctorUid } = useParams();
-  const [doctor, setDoctor] = useState(null);
-  const [patients, setPatients] = useState([]);
-  const [selectedPatient, setSelectedPatient] = useState(null);
-  const [evoluciones, setEvoluciones] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState(null);
-  const [hechoPorHacer, setHechoPorHacer] = useState([]);
-  const [editedPatient, setEditedPatient] = useState(null);
-  const [showConsentimientos, setShowConsentimientos] = useState(false); // Estado para controlar la visibilidad del submenú
+interface Doctor {
+  uid: string;
+  patients: Patient[];
+  // Otros campos del doctor
+}
+
+interface Patient {
+  uid: string;
+  primerNombre: string;
+  segundoNombre: string;
+  primerApellido: string;
+  segundoApellido: string;
+  identificacion: string;
+  genero: string;
+  fechaNacimiento: string;
+  edad: number;
+  estadoCivil: string;
+  celular: string;
+  domicilio: string;
+  ocupacion: string;
+  motivoConsulta: string;
+  historiaMedica: string;
+  // Otros campos del paciente
+}
+
+interface Evolucion {
+  uid: string;
+  fechaHora: string;
+  descripcion: string;
+}
+
+interface Treatment {
+  fecha: string;
+  diente: string;
+  superficie: string;
+  nombre: string;
+  valor: number;
+  ejecutado: boolean;
+  valorEjecutado: number;
+}
+
+const HistoriaClinica: React.FC = () => {
+  const { doctorUid } = useParams<{ doctorUid: string }>();
+  const [doctor, setDoctor] = useState<Doctor | null>(null);
+  const [patients, setPatients] = useState<Patient[]>([]);
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  const [evoluciones, setEvoluciones] = useState<Evolucion[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [activeTab, setActiveTab] = useState<string | null>(null);
+  const [hechoPorHacer, setHechoPorHacer] = useState<Treatment[]>([]);
+  const [editedPatient, setEditedPatient] = useState<Patient | null>(null);
+  const [showConsentimientos, setShowConsentimientos] = useState<boolean>(false); // Estado para controlar la visibilidad del submenú
 
   useEffect(() => {
     console.log('doctorUid:', doctorUid); // Debugging statement
@@ -35,7 +76,7 @@ function HistoriaClinica() {
           setDoctor(doctorData);
 
           const patientPromises = doctorData.patients.map(async (patient) => {
-            const patientData = await getPatientByUid(doctorUid, patient.id);
+            const patientData = await getPatientByUid(doctorUid, patient.uid);
             return patientData;
           });
 
@@ -61,7 +102,7 @@ function HistoriaClinica() {
     }
   }, [doctorUid]);
 
-  const fetchEvoluciones = async (patientUid) => {
+  const fetchEvoluciones = async (patientUid: string) => {
     try {
       const evoluciones = await getEvoluciones(doctorUid, patientUid);
       setEvoluciones(evoluciones);
@@ -70,13 +111,13 @@ function HistoriaClinica() {
     }
   };
 
-  const handlePatientAdded = async (newPatient) => {
+  const handlePatientAdded = async (newPatient: Patient) => {
     try {
       if (!newPatient.uid) {
         throw new Error('El nuevo paciente no tiene un UID válido.');
       }
 
-      const descripcionEvolucion = `Paciente ingresado en fecha ${new Date().toLocaleDateString()} a la hora ${new Date().toLocaleTimeString()}. Datos básicos: Nombre: ${newPatient.primerNombre} ${newPatient.primerApellido}, Identificación: ${newPatient.uidentificacion}, Género: ${newPatient.genero}, Fecha de Nacimiento: ${newPatient.fechaNacimiento}.`;
+      const descripcionEvolucion = `Paciente ingresado en fecha ${new Date().toLocaleDateString()} a la hora ${new Date().toLocaleTimeString()}. Datos básicos: Nombre: ${newPatient.primerNombre} ${newPatient.primerApellido}, Identificación: ${newPatient.identificacion}, Género: ${newPatient.genero}, Fecha de Nacimiento: ${newPatient.fechaNacimiento}.`;
 
       await addEvolucion(doctorUid, newPatient.uid, descripcionEvolucion);
 
@@ -123,20 +164,19 @@ function HistoriaClinica() {
 
   const handleSaveEdit = async () => {
     try {
-      await updatePatientData(doctorUid, editedPatient.uid, editedPatient);
-      setSelectedPatient(editedPatient);
-      setActiveTab(null);
+      if (editedPatient) {
+        await updatePatientData(doctorUid, editedPatient.uid, editedPatient);
+        setSelectedPatient(editedPatient);
+        setActiveTab(null);
+      }
     } catch (error) {
       console.error('Error al guardar los datos del paciente:', error);
     }
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setEditedPatient({
-      ...editedPatient,
-      [name]: value,
-    });
+    setEditedPatient((prevPatient) => (prevPatient ? { ...prevPatient, [name]: value } : null));
   };
 
   const toggleConsentimientos = () => {
@@ -208,7 +248,7 @@ function HistoriaClinica() {
                 <td>{treatment.superficie || 'N/A'}</td>
                 <td>{treatment.nombre}</td>
                 <td>{treatment.valor}</td>
-                <td>{treatment.ejecutado}</td>
+                <td>{treatment.ejecutado ? 'Sí' : 'No'}</td>
                 <td>{treatment.valorEjecutado}</td>
               </tr>
             ))}

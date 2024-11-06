@@ -292,7 +292,14 @@ const Agenda: React.FC<AgendaProps> = ({ doctor, selectedPatient }) => {
 
   return (
     <div className="agenda">
-      <h2>Agenda del Dr. {doctor.primerNombre} {doctor.primerApellido}</h2>
+      <h2>
+        Agenda del Dr(a). {doctor.primerNombre} {doctor.primerApellido}
+        {selectedPatient && (
+          <>
+            , Patient: {selectedPatient.primerApellido} {selectedPatient.segundoApellido}, {selectedPatient.primerNombre}, {selectedPatient.celular}
+          </>
+        )}
+      </h2>
       <label>
         Seleccionar fecha:
         <input
